@@ -15,6 +15,7 @@ services:
       - MYSQLHOST=mysql
       - MYSQLUSER=root
       - MYSQLPASS=example
+      - HASHPEPPER=23af
     volumes:
       - ./server/backend:/app/backend
       - ./server/frontend:/app/frontend
