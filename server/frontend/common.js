@@ -15,32 +15,29 @@ function query() {
 }
 
 function login() {
-    fetch ("http://" + parsedUrl.host + "/login", {
-        method: "POST",
-        mode: "no-cors",
-        body: {}
-    })
-    .then((resp) => resp.text())
-    .then((data) => {
-        document.href = login.html
-    })
-    .catch((err) => {
-        console.log(err);
+    let data = JSON.stringify({
+        username: document.getElementById("username").value,
+        password: document.getElementById("password").value,
     })
 
-    body: JSON.stringify({
-        username: document.getElementById("username").text,
-        password: document.getElementById("password").text
+    console.log("Frontend: " + data)
+
+    fetch ("http://" + parsedUrl.host + "/login", {
+        method: "POST",
+        headers: {"Content-Type" : "application/json"},
+        //mode: "no-cors",
+        body: data
     })
     .then((resp) => resp.text())
-    .then((_resp) => {
-        document.href = index.html
+    .then((resp) => {
+        document.href = login.html
     })
-    .catch((err) => {
+    .catch((resp,err) => {
         console.log(err);
-        if (resp.status = 401) {
+        console.log(resp)
+        if (resp.status == 401) {
             alert("Username or password is incorrect");
-        } else if (resp.status = 500) {
+        } else if (resp.status == 500) {
             alert("Server Error");
         } else {
             alert("Unknown Error");

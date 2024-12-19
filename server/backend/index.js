@@ -8,6 +8,8 @@ const HOST = String(process.env.HOST);
 const MYSQLHOST = String(process.env.MYSQLHOST);
 const MYSQLUSER = String(process.env.MYSQLUSER);
 const MYSQLPASS = String(process.env.MYSQLPASS);
+const HASHPEPPER = String(process.env.HASHPEPPER);
+const HASHSALT = String(process.env.HASHSALT);
 const SQL = "SELECT * FROM users;"
 
 const app = express();
@@ -38,16 +40,18 @@ app.get("/query", function (request, response) {
 })
 
 app.post("/login", function (request, response) {
-    let body = JSON.parse(request["body"]);
-    let SQL = "SELECT * FROM users WHERE username=" + body["username"] + ";"
-    connection.query(SQL, [true], (error, results, fields) => {
+    console.log(request["body"])
+    let body = request["body"]
+    let sqlQuery = "SELECT * FROM users WHERE username='" + body["username"] + "';"
+    connection.query(sqlQuery, [true], (error, results, fields) => {
         if (error) {
             console.error(error.message);
             response.status(500).send("database error");
         } else {
-            let combinedPass = results[0]["salt"] + body["password"] + PEPPER;
-            bcrypt.compare(combinedPass, results[0]["password"], function(err, result) {
-                if (results.length = 0) {
+            let combinedPass = HASHSALT + body["password"] + HASHPEPPER;
+
+            bcrypt.compare(combinedPass, results[0]["passhash"], function(err, result) {
+                if (result.length == 0) {
                     console.log("Username not found");
                     response.status(401).send("unauthorized");
                 } else {
