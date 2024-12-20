@@ -48,7 +48,7 @@ app.post("/login", function (request, response) {
             console.error(error.message);
             response.status(500).send("database error");
         } else {
-            let combinedPass = HASHSALT + body["password"] + HASHPEPPER;
+            let combinedPass = results[0]["salt"] + body["password"] + HASHPEPPER;
             console.log("COMBINED: " + combinedPass)
 
             bcrypt.compare(combinedPass, results[0]["passhash"], (_, result) => {
