@@ -9,8 +9,6 @@ const MYSQLHOST = String(process.env.MYSQLHOST);
 const MYSQLUSER = String(process.env.MYSQLUSER);
 const MYSQLPASS = String(process.env.MYSQLPASS);
 const HASHPEPPER = String(process.env.HASHPEPPER);
-const HASHSALT = String(process.env.HASHSALT);
-const SQL = "SELECT * FROM users;"
 
 const app = express();
 app.use(express.json());
@@ -24,7 +22,7 @@ let connection = mysql.createConnection({
 });
 
 
-app.use("/", express.static("frontend"));
+app.use("/", express.static("frontend", { index : "login.html" }));
 
 
 app.get("/query", function (request, response) {
