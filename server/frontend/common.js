@@ -28,14 +28,10 @@ function login() {
         //mode: "no-cors",
         body: data
     })
-    .then((resp) => resp.text())
     .then((resp) => {
-        document.href = login.html
-    })
-    .catch((resp,err) => {
-        console.log(err);
-        console.log(resp)
-        if (resp.status == 401) {
+        if (resp.ok) {
+            window.location.href = "index.html"
+        } else if (resp.status == 401) {
             alert("Username or password is incorrect");
         } else if (resp.status == 500) {
             alert("Server Error");
@@ -43,4 +39,10 @@ function login() {
             alert("Unknown Error");
         }
     })
+    .catch((err) => {
+        console.log(err);
+        
+    })
+
+    //window.location.href = 'index.html'
 }

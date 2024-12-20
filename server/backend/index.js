@@ -49,10 +49,11 @@ app.post("/login", function (request, response) {
             response.status(500).send("database error");
         } else {
             let combinedPass = HASHSALT + body["password"] + HASHPEPPER;
+            console.log("COMBINED: " + combinedPass)
 
-            bcrypt.compare(combinedPass, results[0]["passhash"], function(err, result) {
-                if (result.length == 0) {
-                    console.log("Username not found");
+            bcrypt.compare(combinedPass, results[0]["passhash"], (_, result) => {
+                if (result == false) {
+                    console.log("Username or password not found");
                     response.status(401).send("unauthorized");
                 } else {
                     console.log(result);
