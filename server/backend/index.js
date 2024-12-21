@@ -9,6 +9,7 @@ const MYSQLHOST = String(process.env.MYSQLHOST);
 const MYSQLUSER = String(process.env.MYSQLUSER);
 const MYSQLPASS = String(process.env.MYSQLPASS);
 const HASHPEPPER = String(process.env.HASHPEPPER);
+const SQL = "SELECT * from users;"
 
 const app = express();
 app.use(express.json());
