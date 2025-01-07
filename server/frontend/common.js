@@ -30,7 +30,8 @@ function login() {
     })
     .then((resp) => {
         if (resp.ok) {
-            window.location.href = "index.html"
+            window.location.href = "totp.html"
+            console.log(resp.data)
         } else if (resp.status == 401) {
             alert("Username or password is incorrect");
         } else if (resp.status == 500) {
@@ -41,8 +42,6 @@ function login() {
     })
     .catch((err) => {
         console.log(err);
-        
     })
-
-    //window.location.href = 'index.html'
 }
+

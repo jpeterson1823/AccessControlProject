@@ -1,6 +1,8 @@
 const express = require("express");
 const mysql = require("mysql2");
 const bcrypt = require("bcrypt");
+const speakeasy = require("speakeasy");
+const qr_code = require("qrcode");
 
 
 const PORT = String(process.env.PORT);
@@ -24,6 +26,7 @@ let connection = mysql.createConnection({
 
 
 app.use("/", express.static("frontend", { index : "login.html" }));
+//app.set('view engine', 'ejs')
 
 
 app.get("/query", function (request, response) {
@@ -38,7 +41,12 @@ app.get("/query", function (request, response) {
   });
 })
 
+app.get("/totp_qr", function (requests, response) {
+
+})
+
 app.post("/login", function (request, response) {
+    // first, use username-password authentication
     console.log(request["body"])
     let body = request["body"]
     let sqlQuery = "SELECT * FROM users WHERE username='" + body["username"] + "';"
@@ -56,10 +64,44 @@ app.post("/login", function (request, response) {
                     response.status(401).send("unauthorized");
                 } else {
                     console.log(result);
-                    response.status(200).send("Success");
+                    //response.status(200).send("Success");
+                    qr_code.toDataURL(speakeasy.generateSecret().otpauth_url, (err, data_url) => {
+                        console.log(data_url);
+                        response.status(200).send({
+                            "qrurl" : data_url
+                        });
+                    });
                 }
             });
         }
+
+        //// totp
+        //// generate secret to use after first login
+        //var secret = speakeasy.generateSecret();
+
+        //// generate and display TOTP QR code
+        //qr_code.toDataURL(secret.otpauth_url, (err, data_url) => {
+        //    console.log("data_url : " + data_url);
+        //    response.write('<img src="' + data_url + "'>");
+        //});
+
+        // get user token
+        //var userToken = window.prompt("Please enter your TOTP token.");
+
+        //// verify token
+        //var verified = speakeasy.totp.verify({
+        //    secret: secret.base32secret,
+        //    encoding: 'base32',
+        //    token: userToken
+        //});
+
+        //if (verified) {
+        //    response.status(200).send("Success");
+        //}
+        //else {
+        //    console.log("TOTP 2FA failed.");
+        //    response.status(401).send("unauthorized");
+        //}
     });
 })
 
