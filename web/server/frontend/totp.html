@@ -12,11 +12,7 @@
 
     <body>
         <div class="content">
-            <p>"Please scan the QR Code and provide a TOTP Token."</p>
-            <p></p>
-            <!-- <img id="qr_code_img" src="<%= locals.qrcode %>"> -->
-            <img id="qr_code_img">
-            <input type="token" placeholder="token" rows="2" cols="50"></input>
+            <input id="totp_token" placeholder="TOTP Token" rows="2" cols="50"></input>
 
             <button type="button" onclick="totp()">Submit</button>
 		</div>

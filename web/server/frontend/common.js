@@ -45,3 +45,31 @@ function login() {
     })
 }
 
+function totp() {
+    let data = JSON.stringify({
+        totp_token: document.getElementById("totp_token").value,
+    })
+
+    fetch ("http://" + parsedUrl.host + "/totp", {
+        method: "POST",
+        headers: {"Content-Type" : "application/json"},
+        //mode: "no-cors",
+        body: data
+    })
+    .then((resp) => {
+        if (resp.ok) {
+            window.location.href = "index.html"
+            console.log(resp.data)
+        } else if (resp.status == 401) {
+            alert("TOTP Token is not correct.");
+        } else if (resp.status == 500) {
+            alert("Server Error");
+        } else {
+            alert("Unknown Error");
+        }
+    })
+    .catch((err) => {
+        console.log(err);
+    })
+}
+
