@@ -62,7 +62,7 @@ app.post("/totp", function (request, response) {
     console.log(timestamp);
 
     // hash timestamp
-    hmac.update(timestamp.toString());
+    hmac.update(TOTP_SECRET + timestamp.toString());
     let hash = hmac.digest("hex");
     console.log(hash);
 

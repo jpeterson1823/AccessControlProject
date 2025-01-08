@@ -62,6 +62,7 @@ function totp() {
             console.log(resp.data)
         } else if (resp.status == 401) {
             alert("TOTP Token is not correct.");
+            window.location.href = "login.html"
         } else if (resp.status == 500) {
             alert("Server Error");
         } else {

@@ -1,17 +1,19 @@
+
 const {createHmac} = require("crypto");
-
 const hmac = createHmac("sha256", "a secret");
+const TOTP_SECRET = String(process.env.TOTP_SECRET);
+console.log(TOTP_SECRET);
 
+// get current timestamp
 var timestamp = new Date(Date.now());
 
 // round to nearest 30 seconds
 timestamp.setSeconds(timestamp.getSeconds() + 30);
 timestamp.setSeconds(0);
-
 console.log(timestamp);
 
-// hash timestamp
-hmac.update(timestamp.toString());
+// hash timestamp with prepended secret
+hmac.update(TOTP_SECRET + timestamp.toString());
 let hash = hmac.digest("hex");
 console.log(hash);
 
@@ -25,6 +27,7 @@ for (let i = 0; i < hash.length; i++) {
         break;
 }
 
+// print token to console
 console.log(token);
 
 // execute `sudo docker run -it --rm -v ./totp.js:/app/totp.js totp` to get hash
