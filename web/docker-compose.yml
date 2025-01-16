@@ -1,24 +1,45 @@
 #version: '3'
 services:
-  mysql:
+  sql-users:
     image: mysql
     environment:
       - MYSQL_ROOT_PASSWORD=example
     volumes:
       - ./sql:/docker-entrypoint-initdb.d/
-  server:
-    build: ./server
+
+  sql-data:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=example
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d/
+
+  server-data:
+    build: ./server-data
+    restart: always
+    environment:
+      - HOST=0.0.0.0
+      - PORT=81
+      - MYSQLHOST=sql-data
+      - MYSQLUSER=root
+      - MYSQLPASS=example
+      - JWTSECRET=jwtsecret
+    volumes:
+      - ./server-data/backend:/app/backend
+    ports:
+      - "81:81"
+
+  server-users:
+    build: ./server-users
     restart: always
     environment:
       - HOST=0.0.0.0
       - PORT=80
-      - MYSQLHOST=mysql
+      - MYSQLHOST=sql-users
       - MYSQLUSER=root
       - MYSQLPASS=example
-      - HASHPEPPER=23af
-      - TOTP_SECRET=supersecretcodev2
     volumes:
-      - ./server/backend:/app/backend
-      - ./server/frontend:/app/frontend
+      - ./server-users/backend:/app/backend
+      - ./server-users/frontend:/app/frontend
     ports:
       - "80:80"
