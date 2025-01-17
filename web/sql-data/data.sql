@@ -16,7 +16,7 @@ INSERT INTO things VALUES(
 INSERT INTO things VALUES(
     "something2-1",
     "something2-2"
-)
+);
 
 INSERT INTO things VALUES(
     "something3-1",

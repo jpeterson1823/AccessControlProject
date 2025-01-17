@@ -25,6 +25,7 @@ services:
       - MYSQLDB=stuff
     volumes:
       - ./server-website/backend:/app/backend
+      - ./server-website/frontend:/app/frontend
     ports:
       - "80:80"
 
@@ -42,6 +43,5 @@ services:
       - JWTSECRET=jwtsecret
     volumes:
       - ./server-users/backend:/app/backend
-      - ./server-users/frontend:/app/frontend
     ports:
       - "3000:80"

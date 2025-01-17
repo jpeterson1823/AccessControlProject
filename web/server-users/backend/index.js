@@ -3,6 +3,7 @@ const mysql = require("mysql2");
 const bcrypt = require("bcrypt");
 const {createHmac} = require("crypto");
 const jwt = require("jsonwebtoken");
+const cors = require("cors")
 
 
 const PORT = String(process.env.PORT);
@@ -10,24 +11,27 @@ const HOST = String(process.env.HOST);
 const MYSQLHOST = String(process.env.MYSQLHOST);
 const MYSQLUSER = String(process.env.MYSQLUSER);
 const MYSQLPASS = String(process.env.MYSQLPASS);
-//const SQL = "SELECT * from users;"
+const MYSQLDB = String(process.env.MYSQLDB);
+const HASHPEPPER = String(process.env.HASHPEPPER);
+const TOTP_SECRET = String(process.env.TOTP_SECRET);
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 
 let connection = mysql.createConnection({
   host: MYSQLHOST,
   user: MYSQLUSER,
   password: MYSQLPASS,
-  database: "users"
+  database: MYSQLDB
 });
 
 
 
 app.post("/totp", function (request, response) {
     // first, use username-password authentication
-    console.log(request["body"])
+    //console.log(request["body"])
     let body = request["body"]
 
     // set up hashing and get timestamp
@@ -38,12 +42,12 @@ app.post("/totp", function (request, response) {
     timestamp.setSeconds(timestamp.getSeconds() + 30);
     timestamp.setSeconds(0);
 
-    console.log(timestamp);
+    //console.log(timestamp);
 
     // hash timestamp
     hmac.update(TOTP_SECRET + timestamp.toString());
     let hash = hmac.digest("hex");
-    console.log(hash);
+    //console.log(hash);
 
     // get first 6 digits from hash
     let token = "";
@@ -57,7 +61,10 @@ app.post("/totp", function (request, response) {
 
     // get token from body
     if (body["totp_token"] === token) {
-        response.status(200).send("TOTP Success");
+        let userData = "SELECT * FROM users WHERE username=" + body["username"] + ";";
+        let jwtoken = jwt.sign(userData, JWTSECRET);
+        console.log("Sent JWT: " + jwt);
+        response.status(200).send(jwtoken);
     }
     else {
         response.status(401).send("Invalid TOTP Token: Comparison failed.");
@@ -73,6 +80,7 @@ app.post("/login", function (request, response) {
     let body = request["body"]
     let sqlQuery = "SELECT * FROM users WHERE username='" + body["username"] + "';"
     connection.query(sqlQuery, [true], (error, results, fields) => {
+        console.log("SQL Query Result: " + results);
         if (error) {
             console.error(error.message);
             response.status(500).send("database error");

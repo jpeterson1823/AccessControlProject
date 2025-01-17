@@ -10,7 +10,8 @@
     "dependencies": {
         "express": "^4.21.2",
         "mysql2": "^3.11.5",
-        "unirest" : "^0.6.0"
+        "unirest" : "^0.6.0",
+        "cors" : "^2.8.5"
     },
     "main": "index.js",
     "keywords": [],

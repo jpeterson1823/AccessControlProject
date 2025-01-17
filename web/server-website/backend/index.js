@@ -1,7 +1,8 @@
 const express = require("express");
 const mysql = require("mysql2");
-const jwt = require("jsonwebtoken");
+//const jwt = require("jsonwebtoken");
 const unirest = require("unirest");
+const cors = require("cors")
 
 
 
@@ -11,11 +12,12 @@ const MYSQLHOST = String(process.env.MYSQLHOST);
 const MYSQLUSER = String(process.env.MYSQLUSER);
 const MYSQLPASS = String(process.env.MYSQLPASS);
 const MYSQLDB = String(process.env.MYSQLDB);
-//const HASHPEPPER = String(process.env.HASHPEPPER);
-//const TOTP_SECRET = String(process.env.TOTP_SECRET);
+
+const SQL = "SELECT * from things;"
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 
 let connection = mysql.createConnection({
@@ -24,6 +26,11 @@ let connection = mysql.createConnection({
   password: MYSQLPASS,
   database: MYSQLDB
 });
+
+
+
+app.use("/", express.static("frontend", { index : "login.html" }));
+//app.set('view engine', 'ejs')
 
 
 
@@ -38,11 +45,6 @@ app.get("/query", function (request, response) {
     }
   });
 })
-
-
-
-app.use("/", express.static("frontend", { index : "login.html" }));
-//app.set('view engine', 'ejs')
 
 
 app.listen(PORT, HOST);
