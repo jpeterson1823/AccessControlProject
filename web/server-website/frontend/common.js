@@ -3,8 +3,10 @@ var parsedUrl = new URL(window.location.href);
 function query() {
     fetch("http://" + parsedUrl.host + "/query", {
         method: "GET",
-        mode: "no-cors",
-        //mode: "cors",
+        headers: {
+            "Authorization" : document.cookie["jwt"]
+        },
+        mode: "cors",
     })
     .then((resp) => resp.text())
     .then((data) => {
@@ -62,9 +64,8 @@ function totp() {
         method: "POST",
         headers: {
             "Content-Type" : "application/json",
-            "Access-Control-Allow-Origin" : "http://" + parsedUrl.host + ":3000"
         },
-        mode: "no-cors",
+        mode: "cors",
         body: data
     })
     .then((resp) => {

@@ -14,6 +14,7 @@ const MYSQLPASS = String(process.env.MYSQLPASS);
 const MYSQLDB = String(process.env.MYSQLDB);
 const HASHPEPPER = String(process.env.HASHPEPPER);
 const TOTP_SECRET = String(process.env.TOTP_SECRET);
+const JWTSECRET = String(process.env.JWTSECRET);
 
 const app = express();
 app.use(express.json());
