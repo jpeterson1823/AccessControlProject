@@ -35,15 +35,29 @@ app.use("/", express.static("frontend", { index : "login.html" }));
 
 
 app.get("/query", function (request, response) {
-  connection.query(SQL, [true], (error, results, fields) => {
-    if (error) {
-      console.error(error.message);
-      response.status(500).send("database error");
-    } else {
-      console.log(results);
-      response.send(results);
-    }
-  });
+    // get request body and parse data
+    let jwt = request.header['Authorization']
+
+    // validate JWT token
+    let jwtDecoded;
+    jwt.validate(jwt, JWTSECRET, (err, decoded) => {
+        if (err) {
+            console.error(err.message);
+        } else {
+            console.log('Decoded JWT: ' + decoded);
+            jwtDecoded = decoded;
+        }
+    }) 
+
+    connection.query(SQL, [true], (error, results, fields) => {
+        if (error) {
+            console.error(error.message);
+            response.status(500).send("database error");
+        } else {
+            console.log(results);
+            response.send(results);
+        }
+    });
 })
 
 
