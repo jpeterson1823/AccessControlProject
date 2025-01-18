@@ -1,7 +1,5 @@
 const express = require("express");
 const mysql = require("mysql2");
-//const jwt = require("jsonwebtoken");
-const unirest = require("unirest");
 const cors = require("cors")
 
 
@@ -36,28 +34,35 @@ app.use("/", express.static("frontend", { index : "login.html" }));
 
 app.get("/query", function (request, response) {
     // get request body and parse data
-    let jwt = request.header['Authorization']
+    var jwt = request.headers.authorization
+    console.log('[query] jwt : ' + jwt)
 
-    // validate JWT token
-    let jwtDecoded;
-    jwt.validate(jwt, JWTSECRET, (err, decoded) => {
-        if (err) {
-            console.error(err.message);
+    fetch ('http://server-users/validateToken', {
+        method: 'POST',
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        mode : 'cors',
+        body: JSON.stringify({jwt : jwt})
+    })
+    .then((res) => {
+        if (res.ok) {
+            connection.query(SQL, [true], (error, results, fields) => {
+                if (error) {
+                    console.error(error.message);
+                    response.status(500).send("database error");
+                } else {
+                    console.log(results);
+                    response.send(results);
+                }
+            });
         } else {
-            console.log('Decoded JWT: ' + decoded);
-            jwtDecoded = decoded;
+            console.log('[query] Invalid JWT')
+            console.log(res)
+            response.status(401).send("Invalid JWT")
         }
-    }) 
+    })
 
-    connection.query(SQL, [true], (error, results, fields) => {
-        if (error) {
-            console.error(error.message);
-            response.status(500).send("database error");
-        } else {
-            console.log(results);
-            response.send(results);
-        }
-    });
 })
 
 

@@ -1,10 +1,12 @@
 var parsedUrl = new URL(window.location.href);
 
 function query() {
+    let cookie = parseCookieTotp();
+
     fetch('http://' + parsedUrl.host + '/query', {
         method: 'GET',
         headers: {
-            'Authorization' : document.cookie['jwt']
+            'Authorization' : cookie['jwt']
         },
         mode: 'cors',
     })

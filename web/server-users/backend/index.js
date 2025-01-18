@@ -116,22 +116,19 @@ app.post('/totp', function (request, response) {
 
 
 
-app.post('/validatejwt', function(request, response) {
+app.post('/validateToken', function(request, response) {
     // parse request body and extract data
-    let body = request['body'];
-    let token = body['jwt']
-    let username = body['username']
-
-    // get user data from database
-    let userData = getUserData(body['username']);
+    var token = request['body']['jwt']
+    console.log(token)
 
     // verify the jwt
-    let validUserString = userData['username'] + ';' + userData['email'];
     jwt.verify(token, JWTSECRET, (err, decoded) => {
         if (err) {
-            console.error(err.message())
+            console.error('JWT VERIFY: ' + err.message)
+            response.status(500).send("server error")
         } else {
             console.log('Decoded JWT: ' + decoded)
+            response.status(200).send("goog tokn")
         }
     })
 })
