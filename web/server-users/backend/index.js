@@ -97,12 +97,15 @@ app.post('/totp', function (request, response) {
             if (error) {
                 console.error('[totp] SQL Query Error! ' + error.message);
             } else {
-                console.log('[totp] Obtained user data for "' + body['username'] + '": ' + JSON.stringify(results));
+                console.log('[totp] Obtained user data for "' + body['username'] + '": ' + JSON.stringify(results[0]));
 
                 // encode the username and email into the JWT token and send it via response
-                // string is formatted as follows: username;email
-                let jwtPayload = JSON.parse('{"' + results['username'] + '":"' + results['email'] + '"}');
-                let jwtoken = jwt.sign(jwtPayload, JWTSECRET, { expiresIn: '0.5 hrs' });
+                // send user info, excluding password hash and salt
+                let userData = results[0]
+                delete userData.passhash;
+                delete userData.salt;
+                var jwtoken = jwt.sign(userData, JWTSECRET, { expiresIn: '0.5 hrs' });
+                console.log("[totp] Generated JWT: " + jwtoken)
                 response.status(200).send(jwtoken);
             }
         })
@@ -119,16 +122,16 @@ app.post('/totp', function (request, response) {
 app.post('/validateToken', function(request, response) {
     // parse request body and extract data
     var token = request['body']['jwt']
-    console.log(token)
+    console.log("[validateToken] JWT Token: " + token)
 
     // verify the jwt
     jwt.verify(token, JWTSECRET, (err, decoded) => {
         if (err) {
-            console.error('JWT VERIFY: ' + err.message)
+            console.error('[validateToken] JWT VERIFY ERROR: ' + err.message)
             response.status(500).send("server error")
         } else {
-            console.log('Decoded JWT: ' + decoded)
-            response.status(200).send("goog tokn")
+            console.log('[validateToken] Decoded JWT: ' + JSON.stringify(decoded))
+            response.status(200).send(JSON.stringify(decoded))
         }
     })
 })

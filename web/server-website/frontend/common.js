@@ -19,6 +19,25 @@ function query() {
     })
 }
 
+function queryLottery() {
+    let cookie = parseCookieTotp();
+
+    fetch('http://' + parsedUrl.host + '/queryLottery', {
+        method: 'GET',
+        headers: {
+            'Authorization' : cookie['jwt']
+        },
+        mode: 'cors',
+    })
+    .then((resp) => resp.text())
+    .then((data) => {
+        document.getElementById('response').innerHTML = data;
+    })
+    .catch((err) => {
+        console.log(err);
+    })
+}
+
 function login() {
     //let data = JSON.stringify({
     //    username: document.getElementById('username').value,

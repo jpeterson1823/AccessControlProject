@@ -11,6 +11,7 @@ services:
     image: mysql
     environment:
       - MYSQL_ROOT_PASSWORD=example
+      - MYSQL_SECURE_FILE_PRIV=""
     volumes:
       - ./sql-data:/docker-entrypoint-initdb.d/
 
