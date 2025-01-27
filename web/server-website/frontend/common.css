@@ -1,5 +1,6 @@
 body {
-    background-color: lightblue;
+    /*background-color: lightblue;*/
+  background-color: #76bed9;
 }
 .content{
     position:absolute;
@@ -9,8 +10,34 @@ body {
     height:200px;
     margin-left:-100px;
     margin-top:-100px;
+    transform: translate(-50%, 0%);
 }
-.button {
+
+textarea {
+  width: 200%;
+  height: 200%;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #1d6f8f;
+  border-radius: 4px;
+  background-color: #fff2ee;
+  font-size: 16px;
+  resize: none;
+  outline: none !important;
+}
+
+input {
+  transform: translate(+53%, -50%);
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #1d6f8f;
+  border-radius: 4px;
+  background-color: #fff2ee;
+  font-size: 12px;
+  resize: none;
+}
+
+/*.button {
     background-color: black;
     border: none;
     color: whitesmoke;
@@ -21,4 +48,58 @@ body {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     margin-left: 40%;
     cursor: pointer;
+}*/
+
+/* Obtained from https://getcssscan.com/css-buttons-examples */
+/* originally called "button-33" */
+
+/* CSS */
+.button {
+  appearance: none;
+  transform: translate(+50%, 0%);
+  text-align: center;
+  background-color: #fff2ee;
+  border: 2px solid #1d6f8f;
+  border-radius: 15px;
+  box-sizing: border-box;
+  color: #3f6493;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-size: 16px;
+  font-weight: 600;
+  line-height: normal;
+  margin: 0;
+  min-height: 40px;
+  min-width: 0;
+  outline: none;
+  padding: 16px 24px;
+  text-align: center;
+  text-decoration: none;
+  line-height: 0px;
+  transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 100%;
+  height: 10%;
+  will-change: transform;
 }
+
+.button:disabled {
+  pointer-events: none;
+}
+
+.button:hover {
+  color: #1d6f8f;
+  background-color: #ffcd96;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translate(+50%, -2px);
+}
+
+.button:active {
+  box-shadow: none;
+  transform: translate(+50%, 0);
+}
+
+

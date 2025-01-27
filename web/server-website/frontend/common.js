@@ -120,7 +120,7 @@ function totp() {
                 updateCookieTotp(totpData);
                 //console.log("new totp data: " + JSON.stringify(totpData))
                 //console.log('Current Cookie: ' + document.cookie);
-                window.location.href = 'query.html'
+                window.location.href = 'routes.html'
             })
         } else if (resp.status == 401) {
             alert('TOTP Token is not correct.');
