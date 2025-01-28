@@ -50,6 +50,32 @@
 							"subViews": [
 								{
 									"_type": "LabelView",
+									"_id": "AAAAAAGUqpiHrJXChNw=",
+									"_parent": {
+										"$ref": "AAAAAAGUepuNJbn5Akw="
+									},
+									"font": "Arial;13;0",
+									"parentStyle": true,
+									"left": 370,
+									"top": 157,
+									"width": 87.4326171875,
+									"height": 13
+								},
+								{
+									"_type": "LabelView",
+									"_id": "AAAAAAGUeq3k5IN6Tew=",
+									"_parent": {
+										"$ref": "AAAAAAGUepuNJbn5Akw="
+									},
+									"font": "Arial;13;0",
+									"parentStyle": true,
+									"left": 370,
+									"top": 157,
+									"width": 87.4326171875,
+									"height": 13
+								},
+								{
+									"_type": "LabelView",
 									"_id": "AAAAAAGUepuNJbn/ibY=",
 									"_parent": {
 										"$ref": "AAAAAAGUepuNJbn5Akw="
@@ -863,7 +889,7 @@
 									"top": 609,
 									"width": 124,
 									"height": 13,
-									"text": "Query Page",
+									"text": "Either Query Page",
 									"wordWrap": true
 								},
 								{
@@ -1514,7 +1540,7 @@
 					"_parent": {
 						"$ref": "AAAAAAGT5NMoOpuEsos="
 					},
-					"name": "Query Page",
+					"name": "Either Query Page",
 					"ownedElements": [
 						{
 							"_type": "DFDDataFlow",
