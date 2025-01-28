@@ -16,5 +16,9 @@ INSERT INTO users VALUES(
     "$2b$12$jh8qi.Ocu/eNX6rU0ugbr.ELTwn0E8ogy/RfIOcBPRMga9kdX6lo2",
     "b34n",
     "user@example.com",
-    "poweruser"
-);
+    "poweruser"),
+    ("one",
+    "$2b$10$.DKlnqlMYSClvQrJ6smCIO3ukBYecuj02V2LJncGKjiNce/jVDbQe",
+    "edc6",
+    "one@example.com",
+    "default");
