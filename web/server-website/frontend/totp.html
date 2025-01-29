@@ -1,16 +1,18 @@
 <!DOCTYPE HTML>
 
 <html>
-    <link rel="shortcut icon" type="image/x-icon" href="favicon.png">
-	<link type="text/css" rel="stylesheet" href="common.css">
+    <link rel="shortcut icon" type="image/x-icon" href="goldfishicon.png">
+	<link type="text/css" rel="stylesheet" href="login.css">
 	<script type="text/javascript" src="common.js"></script>
     <head>
         <title>
             Access Control Project: TOTP
         </title>
     </head>
-
     <body>
+        <div class="heading">
+            <h2>Please enter a 6-digit code</h2>
+        </div>
         <div class="content">
             <input id="totp_token" placeholder="TOTP Token" rows="2" cols="50"></input>
             <button class="button" type="button" onclick="totp()">Submit</button>
