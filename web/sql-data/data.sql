@@ -3,17 +3,19 @@ CREATE DATABASE stuff;
 use stuff;
 
 CREATE TABLE things (
-    data0 VARCHAR(255) NOT NULL,
-    data1 VARCHAR(255) NOT NULL,
-    PRIMARY KEY (data0)
+    fish VARCHAR(255) NOT NULL,
+    lifespan VARCHAR(255) NOT NULL,
+    funfact VARCHAR(255),
+    PRIMARY KEY (fish)
 );
 
-INSERT INTO things (data0, data1) VALUES
-    ("something-11", "something-12"),
-    ("something-21", "something-22"),
-    ("something-31", "something-32"),
-    ("something-41", "something-42"),
-    ("something-51", "something-12");
+INSERT INTO things (fish, lifespan, funfact) VALUES
+    ("Goldfish", "10 years", "Goldfish have a memory of at least three months."),
+    ("Wild Goldfish", "25 years", "Goldfish typically have longer lifespans in the wild."),
+    ("Amberjack", "17 years", "The largest species of Amberjack can grow up to 200 pounds"),
+    ("Banjo Catfish", "11 years", "The Banjo Catfish earned its name due to its body shape which resembles a Banjo."),
+    ("Chimaera", "30 years", "Chimaera use special electroreceptors, which look like dots on their snouts, to help them sense prey."),
+    ("Dragonfish", "10 years", "The male Dragonfish are known to be about one-tenth the size of the female Dragonfish.");
 
 CREATE TABLE lottery (
     drawDate        VARCHAR(255) NOT NULL,
