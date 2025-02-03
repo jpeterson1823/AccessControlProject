@@ -136,6 +136,52 @@ app.post('/validateToken', function(request, response) {
     })
 })
 
+app.post('/log', function (request, response) {
+    let { username, action, success } = request.body;
+    
+    let sqlQuery = 'INSERT INTO logs (log_id, username, action, success) VALUES (UUID(), ?, ?, ?)';
+    connection.query(sqlQuery, [username, action, success], (error, results) => {
+        if (error) {
+            console.error('[log] SQL Error: ' + error.message);
+            response.status(500).send('database error');
+        } else {
+            console.log('[log] Log entry inserted.');
+            response.status(200).send('Log entry added.');
+        }
+    });
+});
+
+app.get('/logs', function (request, response) {
+    let token = request.headers['authorization']?.split(" ")[1];
+
+    if (!token) {
+        return response.status(401).send('Unauthorized');
+    }
+
+    jwt.verify(token, JWTSECRET, (err, decoded) => {
+        if (err) {
+            return response.status(403).send('Forbidden');
+        }
+
+        if (decoded.role !== 'poweruser') {
+            return response.status(403).send('Insufficient permissions');
+        }
+
+        let sqlQuery = 'SELECT * FROM logs ORDER BY timestamp DESC';
+        connection.query(sqlQuery, (error, results) => {
+            if (error) {
+                return response.status(500).send('Database error');
+            }
+
+            // Log the event of fetching logs
+            let logQuery = 'INSERT INTO logs (log_id, username, action, success) VALUES (UUID(), ?, ?, ?)';
+            connection.query(logQuery, [decoded.username, 'Viewed Logs', true], () => {});
+
+            response.status(200).json(results);
+        });
+    });
+});
+
 
 
 

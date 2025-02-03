@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Access Control Project: Log Analysis</title>
+        <link rel="shortcut icon" type="image/x-icon" href="favicon.png">
+        <link type="text/css" rel="stylesheet" href="common.css">
+        <script type="text/javascript" src="common.js"></script>
+    </head>
+    <body>
+        <div class="content">
+            <h2>Log Analysis Dashboard</h2>
+            <p><strong>Admin Access Required</strong></p>
+            <input type="text" id="filterUser" placeholder="Filter by Username">
+            <input type="text" id="filterAction" placeholder="Filter by Action">
+            <button class="button" type="button" onclick="fetchLogs()">Refresh Logs</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Log ID</th>
+                        <th>Username</th>
+                        <th>Timestamp</th>
+                        <th>Action</th>
+                        <th>Success</th>
+                    </tr>
+                </thead>
+                <tbody id="logsTable"></tbody>
+            </table>
+        </div>
+
+        <script>
+            async function fetchLogs() {
+                /*const token = localStorage.getItem("jwt");
+                if (!token) {
+                    alert("You must be logged in!");
+                    return;
+                }*/
+
+                
+                const userFilter = document.getElementById("filterUser").value.toLowerCase();
+                const actionFilter = document.getElementById("filterAction").value.toLowerCase();
+
+                try {
+                    /*const response = await fetch("http://localhost:80/logs", {
+                        method: "GET",
+                        headers: {
+                            "Authorization": `Bearer ${token}`,
+                            "Content-Type": "application/json"
+                        }
+                    });*/
+                    
+                    if (!response.ok) {
+                        throw new Error("Unauthorized or Server Error");
+                    }
+                    
+                    const logs = await response.json();
+                    const logsTable = document.getElementById("logsTable");
+                    logsTable.innerHTML = "";
+                    
+                    logs.filter(log => 
+                        (!userFilter || log.username.toLowerCase().includes(userFilter)) &&
+                        (!actionFilter || log.action.toLowerCase().includes(actionFilter))
+                    ).forEach(log => {
+                        const row = document.createElement("tr");
+                        if (!log.success) row.style.backgroundColor = "#ffcccc";
+                        row.innerHTML = `
+                            <td>${log.log_id}</td>
+                            <td>${log.username}</td>
+                            <td>${log.timestamp}</td>
+                            <td>${log.action}</td>
+                            <td>${log.success ? "✅" : "❌"}</td>
+                        `;
+                        logsTable.appendChild(row);
+                    });
+                } catch (error) {
+                    alert("Error fetching logs: " + error.message);
+                }
+            }
+            fetchLogs();
+        </script>
+    </body>
+</html>

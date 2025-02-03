@@ -11,6 +11,14 @@ CREATE TABLE users (
     role     ENUM('default', 'poweruser')
 );
 
+CREATE TABLE logs (
+    log_id VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
+    username VARCHAR(255) NOT NULL,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    action VARCHAR(255) NOT NULL,
+    success BOOLEAN NOT NULL
+);
+
 INSERT INTO users VALUES(
     "user",
     "$2b$12$jh8qi.Ocu/eNX6rU0ugbr.ELTwn0E8ogy/RfIOcBPRMga9kdX6lo2",
