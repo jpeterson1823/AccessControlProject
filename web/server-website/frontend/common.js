@@ -79,6 +79,7 @@ function login() {
     })
 }
 
+// extracts user info from browser cookie
 function parseCookieTotp() {
     let parsed;
     document.cookie.split(';').forEach((cookie) => {
@@ -136,3 +137,42 @@ function totp() {
     })
 }
 
+
+function fetchLogs() {
+    let userFilter = document.getElementById("filterUser").value.toLowerCase();
+    let actionFilter = document.getElementById("filterAction").value.toLowerCase();
+    let cookie = parseCookieTotp();
+
+    let data = {
+        "fetch": true,
+        "username" : cookie.user,
+        "userFilter" : userFilter,
+        "actionFilter" : actionFilter
+    };
+
+    fetch('http://' + parsedUrl.host + ':3000/logs', {
+        method: 'POST',
+        headers: {
+            'Authorization' : cookie.jwt,
+            'Content-Type' : 'application/json',
+        },
+        mode: 'cors',
+        body: JSON.stringify(data)
+    }).then((response) => {
+        if (response.status == 200) {
+            response.text().then((data) => {
+                console.log("data: " + data);
+                document.getElementById("logs-tarea").innerHTML = data;
+            })
+        }
+        else if (response.status == 403) {
+            alert('Insufficient permissions.');
+        }
+        else if (response.status == 401) {
+            alert('Unauthorized');
+        }
+        else if (response.status == 500) {
+            alert('Database Error');
+        }
+    });
+}

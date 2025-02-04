@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Access Control Project: Log Analysis</title>
+        <link rel="shortcut icon" type="image/x-icon" href="favicon.png">
+        <link type="text/css" rel="stylesheet" href="common.css">
+        <script type="text/javascript" src="common.js"></script>
+    </head>
+    <body>
+        <div class="content">
+            <h2>Log Analysis Dashboard</h2>
+            <p><strong>Admin Access Required</strong></p><br>
+            <input type="text" id="filterUser" placeholder="Filter by Username">
+            <input type="text" id="filterAction" placeholder="Filter by Action">
+            <button class="button" type="button" onclick="fetchLogs()">Refresh Logs</button>
+            <br><br>
+            <textarea rows="20" cols="45" id="logs-tarea"></textarea>
+        </div>
+    </body>
+</html>

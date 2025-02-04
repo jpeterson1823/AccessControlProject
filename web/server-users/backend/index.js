@@ -17,8 +17,8 @@ const TOTP_SECRET = String(process.env.TOTP_SECRET);
 const JWTSECRET = String(process.env.JWTSECRET);
 
 const app = express();
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
 
 let connection = mysql.createConnection({
@@ -135,6 +135,64 @@ app.post('/validateToken', function(request, response) {
         }
     })
 })
+
+
+app.post('/logs', function (request, response) {
+    console.log("LOGS ACCESSED: " + JSON.stringify(request.body));
+    let token = request.headers.authorization;
+    let data = request.body;
+
+    if (!token) {
+        return response.status(401).send('Unauthorized');
+    }
+
+    // check if fetching or storing data
+    if (data.fetch) {
+        jwt.verify(token, JWTSECRET, (err, decoded) => {
+            if (err) {
+                console.log("error: " + err);
+                return response.status(403).send('Forbidden');
+            }
+
+            console.log("Decoded JWT: " + JSON.stringify(decoded));
+
+            if (!(decoded.role === 'poweruser')) {
+                return response.status(403).send('Insufficient permissions');
+            }
+
+            // Log the event of fetching logs
+            let logQuery = 'INSERT INTO logs (log_id, username, action, success) VALUES (UUID(),"' + data.username +'","Fetched Logs",true);';
+            connection.query(logQuery, [true], (err, bingus, bungus) => {
+                if (err)
+                    console.log("sql insert error: " + err);
+            });
+
+            // actually get the logs
+            let sqlQuery = 'SELECT * FROM logs ORDER BY timestamp DESC;';
+            connection.query(sqlQuery, [true], (error, results, fields) => {
+                if (error) {
+                    return response.status(500).send('Database error');
+                }
+                response.status(200).send(results);
+            });
+        });
+    }
+
+    else {
+        let { username, action, success } = request.body;
+        let sqlQuery = 'INSERT INTO logs (log_id, username, action, success) VALUES ((UUID(),"' + username +'","' + action + '","' + success + '"));';
+        connection.query(sqlQuery, [username, action, success], (error, results) => {
+            if (error) {
+                console.error('[log] SQL Error: ' + error.message);
+                response.status(500).send('database error');
+            } else {
+                console.log('[log] Log entry inserted.');
+                response.status(200).send('Log entry added.');
+            }
+        });
+
+    }
+});
 
 
 
