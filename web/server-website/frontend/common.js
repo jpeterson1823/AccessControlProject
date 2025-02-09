@@ -176,3 +176,22 @@ function fetchLogs() {
         }
     });
 }
+
+function motd() {
+    let cookie = parseCookieTotp();
+
+    fetch('http://' + parsedUrl.host + '/motd', {
+        method: 'GET',
+        headers: {
+            'Authorization' : cookie['jwt']
+        },
+        mode: 'cors',
+    })
+    .then((resp) => resp.text())
+    .then((data) => {
+        document.getElementById('response').innerHTML = data;
+    })
+    .catch((err) => {
+        console.log(err);
+    })
+}

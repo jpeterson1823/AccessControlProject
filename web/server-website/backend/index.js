@@ -13,6 +13,7 @@ const MYSQLDB = String(process.env.MYSQLDB);
 
 const SQL = "SELECT * from things;"
 const SQL_LOTTERY = "SELECT * from lottery;"
+const DAILY_MESSAGE = "Every evening, I sit by the pond, watching the sun dip behind the trees, as I feed the fish in the cool, murky water. The catfish are always the most eager, their whiskered faces popping up just below the surface, waiting for their share of food. With my banjo resting beside me, I strum a few light chords, the melody blending with the soft ripple of the water. It's a peaceful rhythm—my song and the catfish's hungry swirls—creating a simple harmony in the fading light of day. It’s these quiet moments, when I’m surrounded by nature, that make me feel truly at ease."
 
 const app = express();
 app.use(express.json());
@@ -67,7 +68,6 @@ app.get("/query", function (request, response) {
             response.status(401).send("Invalid JWT")
         }
     })
-
 })
 
 
@@ -115,6 +115,32 @@ app.get("/queryLottery", function (request, response) {
         }
     })
 
+})
+
+app.get("/motd", function (request, response) {
+    // get request body and parse data
+    var jwt = request.headers.authorization
+    console.log('[motd] jwt : ' + jwt)
+
+    fetch ('http://server-users/validateToken', {
+        method: 'POST',
+        headers: {
+            'Content-Type' : 'application/json'
+        },
+        mode : 'cors',
+        body: JSON.stringify({jwt : jwt})
+    })
+    .then((res) => {
+        if (res.status == 200) {
+            console.log('[motd()] JWT token validated.')
+            console.log("[motd()] "+ JSON.stringify(DAILY_MESSAGE));
+            response.send(DAILY_MESSAGE);
+        } else {
+            console.log('[query] Invalid JWT')
+            console.log(res)
+            response.status(401).send("Invalid JWT")
+        }
+    })
 })
 
 
